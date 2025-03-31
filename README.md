@@ -15,3 +15,7 @@
    ```
 
 ## Screenshot
+![screenshot1](https://github.com/user-attachments/assets/72e3eb82-1b27-402f-9a3e-cab8ffe7eccd)
+
+![screenshot2](https://github.com/user-attachments/assets/d0c38753-7255-4aff-988a-cc006ffbeba5)
+
