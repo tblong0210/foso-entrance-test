@@ -41,9 +41,11 @@ export default function InputSearch() {
 const styles = StyleSheet.create({
   container: {
     alignSelf: "stretch",
+    backgroundColor: "#fff",
   },
   inputContainer: {
     position: "relative",
+    backgroundColor: "#fff",
   },
   inputSearch: {
     height: 40,

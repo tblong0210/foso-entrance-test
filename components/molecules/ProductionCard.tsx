@@ -1,5 +1,10 @@
 import { LinearGradient } from "expo-linear-gradient"
-import { Image, StyleSheet, TouchableOpacity } from "react-native"
+import {
+  Image,
+  StyleSheet,
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native"
 
 import { IProduceCode, IProduceStatus } from "@/mock-data/produce-data"
 
@@ -7,6 +12,8 @@ import ProgressBarCustom from "../atoms/ProgressBarCustom"
 import TagProperty from "../atoms/TagProperty"
 import { ThemedText } from "../ThemedText"
 import { ThemedView } from "../ThemedView"
+import Tooltip from "react-native-walkthrough-tooltip"
+import { useEffect, useState } from "react"
 
 type Props = {
   isPin: boolean
@@ -15,12 +22,73 @@ type Props = {
   handlePinProduce: (item: IProduceCode) => void
 }
 
+type TooltipInfoProps = {
+  color: string
+  text: string
+  ratio?: number
+}
+
+const tooltipInfoData: TooltipInfoProps[] = [
+  {
+    color: "#FF8F0D",
+    text: "Tiến độ Kế hoạch Nguyên liệu",
+  },
+  {
+    color: "#0375F3",
+    text: "Tiến độ Nhập kho Thành phẩm",
+  },
+]
+
 export default function ProductionCard({
   isPin,
   item,
   status,
   handlePinProduce,
 }: Props) {
+  const [isOpenTooltip, setIsOpenTooltip] = useState(false)
+  const [tooltipInfo, setTooltipInfo] =
+    useState<TooltipInfoProps[]>(tooltipInfoData)
+
+  useEffect(() => {
+    const updatedTooltipInfo = tooltipInfo.map((info) => {
+      if (info.text === "Tiến độ Kế hoạch Nguyên liệu") {
+        return { ...info, ratio: item.progressInStock }
+      } else if (info.text === "Tiến độ Nhập kho Thành phẩm") {
+        return { ...info, ratio: item.progressInProcess }
+      }
+      return info
+    })
+    setTooltipInfo(updatedTooltipInfo)
+  }, [item])
+
+  const TooltipInfo = ({ color, text, ratio }: TooltipInfoProps) => {
+    return (
+      <ThemedView style={styles.tooltipContentContainer}>
+        <ThemedView
+          style={[styles.tooltipCircle, { backgroundColor: color }]}
+        />
+        <ThemedText
+          style={{
+            fontSize: 10,
+            fontWeight: 500,
+            color: "#3A3E4C",
+          }}
+        >
+          {text}
+        </ThemedText>
+        <ThemedText
+          style={{
+            fontSize: 10,
+            fontWeight: 500,
+            color: "#667085",
+          }}
+        >
+          {ratio}%
+        </ThemedText>
+      </ThemedView>
+    )
+  }
+
   return (
     <LinearGradient
       colors={["rgba(226, 240, 254, 0)", "rgba(199, 223, 251, 0.5)"]}
@@ -69,10 +137,36 @@ export default function ProductionCard({
                 progress={item.progressInProcess}
               />
             </ThemedView>
-            <Image
-              source={require("@/assets/icons/Info-icon.png")}
-              style={styles.infoIcon}
-            />
+            <ThemedView>
+              <Tooltip
+                isVisible={isOpenTooltip}
+                placement="left"
+                contentStyle={{ width: "100%" }}
+                content={
+                  <>
+                    {tooltipInfo.map((value, index) => (
+                      <TooltipInfo
+                        key={index}
+                        color={value.color}
+                        text={value.text}
+                        ratio={(value.ratio || 0) * 100}
+                      />
+                    ))}
+                  </>
+                }
+                onClose={() => setIsOpenTooltip(false)}
+              >
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => setIsOpenTooltip(true)}
+                >
+                  <Image
+                    source={require("@/assets/icons/Info-icon.png")}
+                    style={styles.infoIcon}
+                  />
+                </TouchableOpacity>
+              </Tooltip>
+            </ThemedView>
           </ThemedView>
         </ThemedView>
       </ThemedView>
@@ -133,5 +227,19 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     tintColor: "#667085",
+  },
+  tooltipContentContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "white",
+    gap: 10,
+  },
+  tooltipCircle: {
+    width: 10,
+    height: 10,
+    borderRadius: 100,
+    backgroundColor: "#FF8F0D",
   },
 })

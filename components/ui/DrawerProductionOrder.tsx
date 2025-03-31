@@ -50,13 +50,13 @@ export default function DrawerProductionOrder() {
           Lệnh Sản Xuất
         </ThemedText>
       </ThemedView>
-      <ThemedView style={{ marginBottom: 10 }}>
+      <ThemedView style={{ marginBottom: 10, backgroundColor: "white" }}>
         <InputSearch />
       </ThemedView>
-      <ThemedView style={{ marginBottom: 10 }}>
+      <ThemedView style={{ marginBottom: 10, backgroundColor: "white" }}>
         <DropdownCustom listItem={listProduceStatuses || []} />
       </ThemedView>
-      <ThemedView style={{ marginBottom: 10 }}>
+      <ThemedView style={{ marginBottom: 10, backgroundColor: "white" }}>
         <ButtonCustom
           style={styles.btnRemovePin}
           activeOpacity={0.6}

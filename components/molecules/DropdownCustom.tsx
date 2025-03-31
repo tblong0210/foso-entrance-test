@@ -140,6 +140,7 @@ export default function DropdownCustom({ listItem }: Props) {
                   borderBottomWidth: 1,
                   borderColor: "#F7F8F9",
                   paddingVertical: 8,
+                  backgroundColor: "#fff",
                 }}
                 key={item.id}
               >
@@ -154,7 +155,9 @@ export default function DropdownCustom({ listItem }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: "#fff",
+  },
   btnExpand: {
     display: "flex",
     flexDirection: "row",
@@ -193,5 +196,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
+    backgroundColor: "#fff",
   },
 })
